@@ -28,5 +28,18 @@ namespace DataAccessLayer.BusinessLogic
             }
             return retval;
         }
+
+        public DataTable GetSubjects()
+        {
+            DataTable dt = new DataTable();
+
+            SqlParameter[] sqlParameter = new SqlParameter[]
+                {
+                    new SqlParameter("@p_Alias", "test"),
+                };
+            dt = DataAccess.DataAccess.executeGetDataTable("select SubjectId,Name from Subjects", sqlParameter);
+
+            return dt;
+        }
     }
 }

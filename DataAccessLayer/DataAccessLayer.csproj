@@ -41,8 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogic\CourseModules.cs" />
+    <Compile Include="BusinessLogic\Courses.cs" />
     <Compile Include="BusinessLogic\Subjects.cs" />
     <Compile Include="DataAccess\DataAccess.cs" />
+    <Compile Include="Models\CourseModules.cs" />
+    <Compile Include="Models\Courses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
