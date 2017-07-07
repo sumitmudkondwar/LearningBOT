@@ -11,7 +11,11 @@ namespace WebApplication1.BOT
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            DataAccessLayer.BusinessLogic.Courses courses = new DataAccessLayer.BusinessLogic.Courses();
+            ddlCourses.DataTextField = "CourseName";
+            ddlCourses.DataValueField = "CourseId";
+            ddlCourses.DataSource = courses.GetCourses();
+            ddlCourses.DataBind();
         }
 
         protected void btnSubmit_Click(object sender, EventArgs e)

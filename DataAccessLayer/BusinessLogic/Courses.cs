@@ -39,15 +39,15 @@ namespace DataAccessLayer.BusinessLogic
             return retval;
         }
 
-        public DataTable GetCourses(int SubjectId)
+        public DataTable GetCourses()
         {
             DataTable dt = new DataTable();
 
             SqlParameter[] sqlParameter = new SqlParameter[]
                 {
-                    new SqlParameter("@p_SubjectId", SubjectId),
+                    new SqlParameter("@p_SubjectId", "val"),
                 };
-            dt = DataAccess.DataAccess.executeGetDataTable("select * from Courses where SubjectId = @p_SubjectId", sqlParameter);
+            dt = DataAccess.DataAccess.executeGetDataTable("select CourseId,CourseName from Courses", sqlParameter);
 
             return dt;
         }
