@@ -170,6 +170,7 @@
     <Content Include="Account\ResetPasswordConfirmation.aspx" />
     <Content Include="Account\TwoFactorAuthenticationSignIn.aspx" />
     <Content Include="Account\VerifyPhoneNumber.aspx" />
+    <Content Include="BOT\CourseContentEntities.aspx" />
     <Content Include="BOT\CourseModules.aspx" />
     <Content Include="BOT\Courses.aspx" />
     <Content Include="BOT\Subjects.aspx" />
@@ -183,6 +184,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Account\Web.config" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Procs\pr_Insert_CourseContentEntities.sql" />
     <Content Include="Procs\pr_Insert_CourseModules.sql" />
     <Content Include="Procs\pr_Insert_Courses.sql" />
     <Content Include="Procs\pr_Insert_Subject.sql" />
@@ -350,6 +352,13 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="BOT\CourseContentEntities.aspx.cs">
+      <DependentUpon>CourseContentEntities.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BOT\CourseContentEntities.aspx.designer.cs">
+      <DependentUpon>CourseContentEntities.aspx</DependentUpon>
+    </Compile>
     <Compile Include="BOT\CourseModules.aspx.cs">
       <DependentUpon>CourseModules.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

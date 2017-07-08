@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -34,6 +35,19 @@ namespace DataAccessLayer.BusinessLogic
                 throw ex;
             }
             return retval;
+        }
+
+        public DataTable GetCourseModules()
+        {
+            DataTable dt = new DataTable();
+
+            SqlParameter[] sqlParameter = new SqlParameter[]
+                {
+                    new SqlParameter("@p_SubjectId", "val"),
+                };
+            dt = DataAccess.DataAccess.executeGetDataTable("select ModuleId,ModuleName from CourseModules", sqlParameter);
+
+            return dt;
         }
     }
 }
