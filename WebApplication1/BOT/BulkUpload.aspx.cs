@@ -131,7 +131,7 @@ namespace WebApplication1.BOT
 
         private void ExcelRead3()
         {
-            var fileName = @"C:\File\rawfile.xlsx";
+            var fileName = @"D:\home\site\wwwroot\RawFile\rawfile.xlsx";
             var connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fileName + ";Extended Properties=\"Excel 12.0;IMEX=1;HDR=NO;TypeGuessRows=0;ImportMixedTypes=Text\""; ;
             using (var conn = new OleDbConnection(connectionString))
             {
@@ -145,6 +145,8 @@ namespace WebApplication1.BOT
                     var adapter = new OleDbDataAdapter(cmd);
                     var ds = new DataSet();
                     adapter.Fill(ds);
+                    grdbulkdata.DataSource = ds;
+                    grdbulkdata.DataBind();
                 }
             }
         }

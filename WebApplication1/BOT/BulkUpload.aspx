@@ -5,4 +5,5 @@
     <h3>Your application description page.</h3>
     <p>Use this area to provide additional information.</p>
     <asp:Button ID="btnUpload" runat="server" OnClick="btnUpload_OnClick" Text="Upload" />
+    <asp:GridView ID="grdbulkdata" runat="server"></asp:GridView>
 </asp:Content>
