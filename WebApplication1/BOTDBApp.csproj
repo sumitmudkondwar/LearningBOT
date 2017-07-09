@@ -43,6 +43,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -102,6 +103,7 @@
     <Reference Include="Microsoft.AspNet.FriendlyUrls">
       <HintPath>..\packages\Microsoft.AspNet.FriendlyUrls.Core.1.0.2\lib\net45\Microsoft.AspNet.FriendlyUrls.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
@@ -170,10 +172,12 @@
     <Content Include="Account\ResetPasswordConfirmation.aspx" />
     <Content Include="Account\TwoFactorAuthenticationSignIn.aspx" />
     <Content Include="Account\VerifyPhoneNumber.aspx" />
+    <Content Include="BOT\BulkUpload.aspx" />
     <Content Include="BOT\CourseContentEntities.aspx" />
     <Content Include="BOT\CourseModules.aspx" />
     <Content Include="BOT\Courses.aspx" />
     <Content Include="BOT\Subjects.aspx" />
+    <Content Include="BOT\SubjectsBulk.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -352,6 +356,13 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="BOT\BulkUpload.aspx.cs">
+      <DependentUpon>BulkUpload.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BOT\BulkUpload.aspx.designer.cs">
+      <DependentUpon>BulkUpload.aspx</DependentUpon>
+    </Compile>
     <Compile Include="BOT\CourseContentEntities.aspx.cs">
       <DependentUpon>CourseContentEntities.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -379,6 +390,13 @@
     </Compile>
     <Compile Include="BOT\Subjects.aspx.designer.cs">
       <DependentUpon>Subjects.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="BOT\SubjectsBulk.aspx.cs">
+      <DependentUpon>SubjectsBulk.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BOT\SubjectsBulk.aspx.designer.cs">
+      <DependentUpon>SubjectsBulk.aspx</DependentUpon>
     </Compile>
     <Compile Include="Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>

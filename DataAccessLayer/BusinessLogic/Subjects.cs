@@ -37,7 +37,7 @@ namespace DataAccessLayer.BusinessLogic
                 {
                     new SqlParameter("@p_Alias", "test"),
                 };
-            dt = DataAccess.DataAccess.executeGetDataTable("select SubjectId,Name from Subjects", sqlParameter);
+            dt = DataAccess.DataAccess.executeGetDataTable("select SubjectId,Name,Description from Subjects", sqlParameter);
 
             return dt;
         }

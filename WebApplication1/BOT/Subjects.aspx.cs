@@ -12,17 +12,37 @@ namespace WebApplication1.BOT
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (!IsPostBack)
+            {
+                this.ClearAll();
+            }
         }
 
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
             int retval = 0;
-            DataAccessLayer.BusinessLogic.Subjects obj = new DataAccessLayer.BusinessLogic.Subjects();
-            retval = obj.AddNewSubject(txtSubjectName.Text, txtSubjectDescription.Text);
+            try
+            {
+                DataAccessLayer.BusinessLogic.Subjects obj = new DataAccessLayer.BusinessLogic.Subjects();
+                retval = obj.AddNewSubject(txtSubjectName.Text, txtSubjectDescription.Text);
+
+                if (retval != 0)
+                {
+                    this.ClearAll();
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
 
         protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.ClearAll();
+        }
+
+        private void ClearAll()
         {
             txtSubjectName.Text = string.Empty;
             txtSubjectDescription.Text = string.Empty;

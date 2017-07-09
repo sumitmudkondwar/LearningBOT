@@ -95,7 +95,7 @@
         <div class="form-group">
             <asp:Label runat="server" AssociatedControlID="txtCourseDate" CssClass="col-md-2 control-label">Course Date:</asp:Label>
             <div class="col-md-10">
-                <asp:TextBox runat="server" ID="txtCourseDate" CssClass="form-control" />
+                <asp:TextBox runat="server" ID="txtCourseDate" CssClass="form-control" TextMode="Date" />
             </div>
         </div>
         <div class="form-group">
