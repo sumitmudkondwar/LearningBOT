@@ -6,4 +6,10 @@
     <p>Use this area to provide additional information.</p>
     <asp:Button ID="btnUpload" runat="server" OnClick="btnUpload_OnClick" Text="Upload" />
     <asp:GridView ID="grdbulkdata" runat="server"></asp:GridView>
+
+    <asp:FileUpload ID="FileUpload1" runat="server" />
+    <asp:Button ID="btnImport" runat="server" Text="Import" OnClick="ImportExcel" />
+    <hr />
+    <asp:GridView ID="GridView1" runat="server">
+    </asp:GridView>
 </asp:Content>

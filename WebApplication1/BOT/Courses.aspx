@@ -1,6 +1,16 @@
 ﻿<%@ Page Title="Courses" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Courses.aspx.cs" Inherits="WebApplication1.BOT.Courses" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://jqueryui.com/jquery-wp-content/themes/jqueryui.com/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+    <script>
+        $(function () {
+            $("#txtCourseDate").datepicker();
+        });
+    </script>
     <h2><%: Title %>.</h2>
     <br />
     <br />
@@ -95,7 +105,7 @@
         <div class="form-group">
             <asp:Label runat="server" AssociatedControlID="txtCourseDate" CssClass="col-md-2 control-label">Course Date:</asp:Label>
             <div class="col-md-10">
-                <asp:TextBox runat="server" ID="txtCourseDate" CssClass="form-control" TextMode="Date" />
+                <asp:TextBox runat="server" ID="txtCourseDate" />
             </div>
         </div>
         <div class="form-group">

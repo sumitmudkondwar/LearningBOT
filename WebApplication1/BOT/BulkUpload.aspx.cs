@@ -21,134 +21,119 @@ namespace WebApplication1.BOT
 
         protected void btnUpload_OnClick(object sender, EventArgs e)
         {
-            this.ExcelRead3();
+            //this.ImportExcel();
         }
 
-        private void ExcelRead2()
+        public static string GetCellValue(SpreadsheetDocument document, Cell cell)
         {
-            try
+            SharedStringTablePart stringTablePart = document.WorkbookPart.SharedStringTablePart;
+            string value = cell.CellValue.InnerXml;
+
+            if (cell.DataType != null && cell.DataType.Value == CellValues.SharedString)
             {
-                //specify the file name where its actually exist   
-                string filepath = @"C:\File\rawfile.xlsx";
+                return stringTablePart.SharedStringTable.ChildElements[Int32.Parse(value)].InnerText;
+            }
+            else
+            {
+                return value;
+            }
+        }
 
-                //open the excel using openxml sdk  
-                using (SpreadsheetDocument doc = SpreadsheetDocument.Open(filepath, false))
+        private void ExcelRead4()
+        {
+            DataTable dt = new DataTable();
+
+            using (SpreadsheetDocument spreadSheetDocument = SpreadsheetDocument.Open(@"C:\File\rawfile.xlsx", false))
+            {
+
+                WorkbookPart workbookPart = spreadSheetDocument.WorkbookPart;
+                IEnumerable<Sheet> sheets = spreadSheetDocument.WorkbookPart.Workbook.GetFirstChild<Sheets>().Elements<Sheet>();
+                string relationshipId = sheets.First().Id.Value;
+                WorksheetPart worksheetPart = (WorksheetPart)spreadSheetDocument.WorkbookPart.GetPartById(relationshipId);
+                Worksheet workSheet = worksheetPart.Worksheet;
+                SheetData sheetData = workSheet.GetFirstChild<SheetData>();
+                IEnumerable<Row> rows = sheetData.Descendants<Row>();
+
+                foreach (Cell cell in rows.ElementAt(0))
                 {
-
-                    //create the object for workbook part  
-                    WorkbookPart wbPart = doc.WorkbookPart;
-
-                    //statement to get the count of the worksheet  
-                    int worksheetcount = doc.WorkbookPart.Workbook.Sheets.Count();
-
-                    //statement to get the sheet object  
-                    Sheet mysheet = (Sheet)doc.WorkbookPart.Workbook.Sheets.ChildElements.GetItem(0);
-
-                    //statement to get the worksheet object by using the sheet id  
-                    Worksheet Worksheet = ((WorksheetPart)wbPart.GetPartById(mysheet.Id)).Worksheet;
-
-                    //Note: worksheet has 8 children and the first child[1] = sheetviewdimension,....child[4]=sheetdata  
-                    int wkschildno = 4;
-
-
-                    //statement to get the sheetdata which contains the rows and cell in table  
-                    SheetData Rows = (SheetData)Worksheet.ChildElements.GetItem(wkschildno);
-
-
-                    //getting the row as per the specified index of getitem method  
-                    Row currentrow = (Row)Rows.ChildElements.GetItem(1);
-
-                    //getting the cell as per the specified index of getitem method  
-                    Cell currentcell = (Cell)currentrow.ChildElements.GetItem(1);
-
-                    //statement to take the integer value  
-                    string currentcellvalue = currentcell.InnerText;
-
+                    dt.Columns.Add(GetCellValue(spreadSheetDocument, cell));
                 }
-            }
-            catch (Exception Ex)
-            {
-                throw Ex;
-            }
-        }
 
-        private void ExcelRead1()
-        {
-            string fileName = @"C:\File\rawfile.xlsx";
-
-            using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            {
-                using (SpreadsheetDocument doc = SpreadsheetDocument.Open(fs, false))
+                foreach (Row row in rows) //this will also include your header row...
                 {
-                    WorkbookPart workbookPart = doc.WorkbookPart;
-                    SharedStringTablePart sstpart = workbookPart.GetPartsOfType<SharedStringTablePart>().First();
-                    SharedStringTable sst = sstpart.SharedStringTable;
+                    DataRow tempRow = dt.NewRow();
 
-                    WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
-                    Worksheet sheet = worksheetPart.Worksheet;
-
-                    var cells = sheet.Descendants<Cell>();
-                    var rows = sheet.Descendants<Row>();
-
-                    Console.WriteLine("Row count = {0}", rows.LongCount());
-                    Console.WriteLine("Cell count = {0}", cells.LongCount());
-
-                    // One way: go through each cell in the sheet
-                    foreach (Cell cell in cells)
+                    for (int i = 0; i < row.Descendants<Cell>().Count(); i++)
                     {
-                        if ((cell.DataType != null) && (cell.DataType == CellValues.SharedString))
-                        {
-                            int ssid = int.Parse(cell.CellValue.Text);
-                            string str = sst.ChildElements[ssid].InnerText;
-                            Console.WriteLine("Shared string {0}: {1}", ssid, str);
-                        }
-                        else if (cell.CellValue != null)
-                        {
-                            Console.WriteLine("Cell contents: {0}", cell.CellValue.Text);
-                        }
+                        tempRow[i] = GetCellValue(spreadSheetDocument, row.Descendants<Cell>().ElementAt(i));
                     }
 
-                    // Or... via each row
-                    foreach (Row row in rows)
+                    dt.Rows.Add(tempRow);
+                }
+
+            }
+            dt.Rows.RemoveAt(0); //...so i'm taking it out here.
+        }
+
+        protected void ImportExcel(object sender, EventArgs e)
+        {
+            //Save the uploaded Excel file.
+            string filePath = Server.MapPath("~/RawFile/") + Path.GetFileName(FileUpload1.PostedFile.FileName);
+            FileUpload1.SaveAs(filePath);
+
+            //string filePath = @"C:\File\rawfile.xlsx";
+
+            //Open the Excel file in Read Mode using OpenXml.
+            using (SpreadsheetDocument doc = SpreadsheetDocument.Open(filePath, false))
+            {
+                //Read the first Sheet from Excel file.
+                Sheet sheet = doc.WorkbookPart.Workbook.Sheets.GetFirstChild<Sheet>();
+
+                //Get the Worksheet instance.
+                Worksheet worksheet = (doc.WorkbookPart.GetPartById(sheet.Id.Value) as WorksheetPart).Worksheet;
+
+                //Fetch all the rows present in the Worksheet.
+                IEnumerable<Row> rows = worksheet.GetFirstChild<SheetData>().Descendants<Row>();
+
+                //Create a new DataTable.
+                DataTable dt = new DataTable();
+
+                //Loop through the Worksheet rows.
+                foreach (Row row in rows)
+                {
+                    //Use the first row to add columns to DataTable.
+                    if (row.RowIndex.Value == 1)
                     {
-                        foreach (Cell c in row.Elements<Cell>())
+                        foreach (Cell cell in row.Descendants<Cell>())
                         {
-                            if ((c.DataType != null) && (c.DataType == CellValues.SharedString))
-                            {
-                                int ssid = int.Parse(c.CellValue.Text);
-                                string str = sst.ChildElements[ssid].InnerText;
-                                Console.WriteLine("Shared string {0}: {1}", ssid, str);
-                            }
-                            else if (c.CellValue != null)
-                            {
-                                Console.WriteLine("Cell contents: {0}", c.CellValue.Text);
-                            }
+                            dt.Columns.Add(GetValue(doc, cell));
+                        }
+                    }
+                    else
+                    {
+                        //Add rows to DataTable.
+                        dt.Rows.Add();
+                        int i = 0;
+                        foreach (Cell cell in row.Descendants<Cell>())
+                        {
+                            dt.Rows[dt.Rows.Count - 1][i] = GetValue(doc, cell);
+                            i++;
                         }
                     }
                 }
+                GridView1.DataSource = dt;
+                GridView1.DataBind();
             }
         }
 
-        private void ExcelRead3()
+        private string GetValue(SpreadsheetDocument doc, Cell cell)
         {
-            var fileName = @"D:\home\site\wwwroot\RawFile\rawfile.xlsx";
-            var connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fileName + ";Extended Properties=\"Excel 12.0;IMEX=1;HDR=NO;TypeGuessRows=0;ImportMixedTypes=Text\""; ;
-            using (var conn = new OleDbConnection(connectionString))
+            string value = cell.CellValue.InnerText;
+            if (cell.DataType != null && cell.DataType.Value == CellValues.SharedString)
             {
-                conn.Open();
-
-                var sheets = conn.GetOleDbSchemaTable(System.Data.OleDb.OleDbSchemaGuid.Tables, new object[] { null, null, null, "TABLE" });
-                using (var cmd = conn.CreateCommand())
-                {
-                    cmd.CommandText = "SELECT * FROM [" + sheets.Rows[0]["TABLE_NAME"].ToString() + "] ";
-
-                    var adapter = new OleDbDataAdapter(cmd);
-                    var ds = new DataSet();
-                    adapter.Fill(ds);
-                    grdbulkdata.DataSource = ds;
-                    grdbulkdata.DataBind();
-                }
+                return doc.WorkbookPart.SharedStringTablePart.SharedStringTable.ChildElements.GetItem(int.Parse(value)).InnerText;
             }
+            return value;
         }
     }
 }
